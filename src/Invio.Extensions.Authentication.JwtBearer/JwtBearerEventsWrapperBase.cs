@@ -15,8 +15,7 @@ namespace Invio.Extensions.Authentication.JwtBearer {
     ///   true wrappers to implement their desired functionality without having
     ///   to provide distracting invocations to the wrapped <see cref="JwtBearerEvents" />.
     /// </remarks>
-    public abstract class JwtBearerEventsWrapperBase : JwtBearerEvents
-    {
+    public abstract class JwtBearerEventsWrapperBase : JwtBearerEvents {
         private JwtBearerEvents inner;
         private readonly Type innerType;
 
