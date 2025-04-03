@@ -49,6 +49,30 @@ namespace Invio.Extensions.Authentication.JwtBearer {
         }
 
         [Fact]
+        public static void AddQueryStringAuthentication_DefaultQueryStringParameter_CustomEventsType() {
+
+            // Arrange
+
+            var options = new JwtBearerOptions { EventsType = typeof(JwtBearerEvents) };
+
+            // Act
+
+            options.AddQueryStringAuthentication();
+
+            // Assert
+
+            Assert.NotNull(options.Events);
+            var events = Assert.IsType<QueryStringJwtBearerEventsWrapper>(options.Events);
+
+            Assert.Equal(
+                QueryStringJwtBearerEventsWrapper.DefaultQueryStringParameterName,
+                events.QueryStringParameterName
+            );
+
+            Assert.Null(options.EventsType);
+        }
+
+        [Fact]
         public static void AddQueryStringAuthentication_CustomQueryStringParameter_NullOptions() {
 
             // Arrange
@@ -83,6 +107,26 @@ namespace Invio.Extensions.Authentication.JwtBearer {
             Assert.NotNull(options.Events);
             var events = Assert.IsType<QueryStringJwtBearerEventsWrapper>(options.Events);
             Assert.Equal(queryStringParameterName, events.QueryStringParameterName);
+        }
+
+        [Fact]
+        public static void AddQueryStringAuthentication_CustomQueryStringParameter_CustomEventsType() {
+
+            // Arrange
+
+            var options = new JwtBearerOptions { EventsType = typeof(JwtBearerEvents) };
+            const string queryStringParameterName = "query-string-parameter-name";
+
+            // Act
+
+            options.AddQueryStringAuthentication(queryStringParameterName);
+
+            // Assert
+
+            Assert.NotNull(options.Events);
+            var events = Assert.IsType<QueryStringJwtBearerEventsWrapper>(options.Events);
+            Assert.Equal(queryStringParameterName, events.QueryStringParameterName);
+            Assert.Null(options.EventsType);
         }
 
     }

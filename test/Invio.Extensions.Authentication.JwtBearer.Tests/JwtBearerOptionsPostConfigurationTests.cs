@@ -51,7 +51,8 @@ namespace Invio.Extensions.Authentication.JwtBearer {
             get {
                 var tuples = ImmutableList.Create<(string, JwtBearerOptions)>(
                     ("name", new JwtBearerOptions { Events = null }),
-                    (null, new JwtBearerOptions { Events = new JwtBearerEvents() })
+                    (null, new JwtBearerOptions { Events = new JwtBearerEvents() }),
+                    ("name", new JwtBearerOptions { EventsType = typeof(JwtBearerEvents) })
                 );
 
                 return tuples.Select(tuple => new object[] { tuple.Item1, tuple.Item2 });
@@ -77,6 +78,7 @@ namespace Invio.Extensions.Authentication.JwtBearer {
 
             var typed = Assert.IsType<QueryStringJwtBearerEventsWrapper>(bearerOptions.Events);
             Assert.Equal(options.QueryStringParameterName, typed.QueryStringParameterName);
+            Assert.Null(bearerOptions.EventsType);
         }
 
         private IPostConfigureOptions<JwtBearerOptions> CreatePostConfiguration(

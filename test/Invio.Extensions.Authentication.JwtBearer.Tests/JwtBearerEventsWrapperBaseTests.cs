@@ -17,6 +17,7 @@ namespace Invio.Extensions.Authentication.JwtBearer {
             var inner = Mock.Of<JwtBearerEvents>();
             var wrapper = this.CreateJwtBearerEvents(inner);
             var context = new DefaultAuthenticationFailedContext();
+            SetupContext(context, inner);
 
             // Act
 
@@ -35,6 +36,7 @@ namespace Invio.Extensions.Authentication.JwtBearer {
             var inner = Mock.Of<JwtBearerEvents>();
             var wrapper = this.CreateJwtBearerEvents(inner);
             var context = new DefaultMessageReceivedContext();
+            SetupContext(context, inner);
 
             // Act
 
@@ -53,6 +55,7 @@ namespace Invio.Extensions.Authentication.JwtBearer {
             var inner = Mock.Of<JwtBearerEvents>();
             var wrapper = this.CreateJwtBearerEvents(inner);
             var context = new DefaultTokenValidatedContext();
+            SetupContext(context, inner);
 
             // Act
 
@@ -71,6 +74,7 @@ namespace Invio.Extensions.Authentication.JwtBearer {
             var inner = Mock.Of<JwtBearerEvents>();
             var wrapper = this.CreateJwtBearerEvents(inner);
             var context = new DefaultJwtBearerChallengeContext();
+            SetupContext(context, inner);
 
             // Act
 
@@ -80,6 +84,9 @@ namespace Invio.Extensions.Authentication.JwtBearer {
 
             Mock.Get(inner).Verify(events => events.Challenge(context));
         }
+
+        protected virtual void SetupContext(BaseContext<JwtBearerOptions> context, 
+            JwtBearerEvents inner) {}
 
         protected abstract JwtBearerEvents CreateJwtBearerEvents(JwtBearerEvents inner);
 

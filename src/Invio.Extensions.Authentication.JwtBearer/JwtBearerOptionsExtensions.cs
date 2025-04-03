@@ -28,10 +28,18 @@ namespace Invio.Extensions.Authentication.JwtBearer {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            options.Events =
-                new QueryStringJwtBearerEventsWrapper(
-                    options.Events ?? new JwtBearerEvents()
-                );
+            if (options.EventsType == null) {
+                options.Events =
+                    new QueryStringJwtBearerEventsWrapper(
+                        options.Events ?? new JwtBearerEvents()
+                    );
+            } else {
+                options.Events =
+                    new QueryStringJwtBearerEventsWrapper(
+                        options.EventsType
+                    );
+                options.EventsType = null;
+            }
 
             return options;
         }
@@ -61,11 +69,20 @@ namespace Invio.Extensions.Authentication.JwtBearer {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            options.Events =
-                new QueryStringJwtBearerEventsWrapper(
-                    options.Events ?? new JwtBearerEvents(),
-                    queryStringParameterName
-                );
+            if (options.EventsType == null) {
+                options.Events =
+                    new QueryStringJwtBearerEventsWrapper(
+                        options.Events ?? new JwtBearerEvents(),
+                        queryStringParameterName
+                    );
+            } else {
+                options.Events =
+                    new QueryStringJwtBearerEventsWrapper(
+                        options.EventsType,
+                        queryStringParameterName
+                    );
+                options.EventsType = null;
+            }
 
             return options;
         }

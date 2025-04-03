@@ -60,6 +60,20 @@ namespace Invio.Extensions.Authentication.JwtBearer {
 
         /// <summary>
         ///   Wraps an instance of <see cref="JwtBearerEvents" /> with a behavior
+        ///   that checks for a token in the query string with a name of "bearer".
+        /// </summary>
+        /// <param name="innerType">
+        ///   A base service type implementation of <see cref="JwtBearerEvents" />
+        ///   that will gain this additional query string inspection behavior.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///   Thrown when <paramref name="innerType" /> is null.
+        /// </exception>
+        public QueryStringJwtBearerEventsWrapper(Type innerType) :
+            this(innerType, DefaultQueryStringParameterName) {}
+
+        /// <summary>
+        ///   Wraps an instance of <see cref="JwtBearerEvents" /> with a behavior
         ///   checks for a token in the query string with a name specified in the
         ///   <paramref name="queryStringParameterName" /> parameter.
         /// </summary>
@@ -81,6 +95,42 @@ namespace Invio.Extensions.Authentication.JwtBearer {
         /// </exception>
         public QueryStringJwtBearerEventsWrapper(JwtBearerEvents inner, string queryStringParameterName) :
             base(inner) {
+
+            if (queryStringParameterName == null) {
+                throw new ArgumentNullException(nameof(queryStringParameterName));
+            } else if (String.IsNullOrWhiteSpace(queryStringParameterName)) {
+                throw new ArgumentException(
+                    $"The '{nameof(queryStringParameterName)}' cannot be null or whitespace.",
+                    nameof(queryStringParameterName)
+                );
+            }
+
+            this.QueryStringParameterName = queryStringParameterName;
+        }
+
+        /// <summary>
+        ///   Wraps an instance of <see cref="JwtBearerEvents" /> with a behavior
+        ///   checks for a token in the query string with a name specified in the
+        ///   <paramref name="queryStringParameterName" /> parameter.
+        /// </summary>
+        /// <param name="innerType">
+        ///   A base service type implementation of <see cref="JwtBearerEvents" />
+        ///   that will gain this additional query string inspection behavior.
+        /// </param>
+        /// <param name="queryStringParameterName">
+        ///   The name of the query string parameter that will be sought from requests
+        ///   in order to extract a token.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///   Thrown when <paramref name="innerType" /> or
+        ///   <paramref name="queryStringParameterName" /> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///   Thrown when <paramref name="queryStringParameterName" /> is an invalid name
+        ///   for a query string parameter.
+        /// </exception>
+        public QueryStringJwtBearerEventsWrapper(Type innerType, string queryStringParameterName) :
+            base(innerType) {
 
             if (queryStringParameterName == null) {
                 throw new ArgumentNullException(nameof(queryStringParameterName));
